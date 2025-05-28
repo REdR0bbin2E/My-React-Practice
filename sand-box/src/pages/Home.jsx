@@ -39,6 +39,7 @@ function Home() {
         else {
             setValidUserCreds("email or password are valid user logged in successfully");
             console.log("testing git change");
+            console.log("testing git change2");
 
         }
     }
