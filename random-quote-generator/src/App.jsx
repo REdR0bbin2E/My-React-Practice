@@ -1,40 +1,39 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import quotes from "./quotes.json"
 import { AnimatePresence, motion } from 'framer-motion';
 function App() {
 
 
 
 
-  const [quotes, setQuotes] = useState([]);
-  const [index, setIndex] = useState(0);
-
+  const [quote, setQuote] = useState(null);
 
   useEffect(() => {
-    fetch("https://zenquotes.io/api/random") //ask the API
-      .then(res => res.json())  //this is me converting it to a useable JSON
-      .then(data => {
-        setQuotes(data) //Store the quotes in my state
-        setIndex(Math.floor(Math.random() * data.length)); //Pick a random quote
-      });
-  }, [])
+    fetchQuote();
 
+  }, []);
+
+  const fetchQuote = async () => {
+    const random = quotes[Math.floor(Math.random() * quotes.length)];
+    setQuote(random);
+  };
 
 
   const getRandomQuote = () => {
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    setIndex(randomIndex);
+    fetchQuote();
   };
 
-  if (quotes.length === 0) {
-    return <p>Loading quotes...
+  if (!quote) {
+    return <p>Loading quote...
     </p>
   }
   return (
     <div className="App" style={{ padding: "2rem", textAlign: "center" }}>
-      <h1>Random Quote Generator</h1>
+      <motion.h1 whileHover={{ scale: 1.2 }} transition={{ duration: 3 }}>Random Quote Generator</motion.h1>
 
-      <motion.p whileTap={{ scale: 0.9 }} whileHover={{ scale: 1.1 }} initial={{ opacity: 0, color: "blue" }} animate={{ animationDelay: 5, opacity: 1, color: "blue", fontSize: 55 }} transition={{ duration: 5, repeat: 2 }} style={{ fontSize: "1.5rem", marginBottom: "1rem" }}>{quotes[index]?.a || "Unknown"}, {quotes[index]?.q}
+      <motion.p whileTap={{ scale: 0.9 }} whileHover={{ scale: 1.2 }} initial={{ opacity: 0, color: "blue" }} animate={{ opacity: 1, color: "blue", fontSize: 55 }} transition={{ duration: 3 }} style={{ fontSize: "1.5rem", marginBottom: "1rem" }}>
+        {quote.a || "Unknown"}, {quote.q}
       </motion.p>
 
       <button onClick={getRandomQuote}>Show Another Quote</button>
